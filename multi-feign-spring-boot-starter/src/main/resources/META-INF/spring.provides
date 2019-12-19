@@ -1,0 +1,1 @@
+provides: feign-core,feign-jackson,feign-slf4j,feign-okhttp,feign-httpclient,spring-context,multi-feign-auto-configurer

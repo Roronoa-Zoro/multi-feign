@@ -1,0 +1,9 @@
+server:
+  port: 8080
+feign:
+  okhttp:
+    enabled: true
+logging:
+  level:
+#    root: debug
+    com.illegalaccess.feign.okhttp.client: debug
