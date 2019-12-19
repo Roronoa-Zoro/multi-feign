@@ -5,14 +5,13 @@
     <parent>
         <artifactId>multi-feign</artifactId>
         <groupId>com.illegalaccess</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>multi-feign-spring-boot-starter-test</artifactId>
 
     <name>multi-feign-spring-boot-starter-test</name>
-    <url>http://www.example.com</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -30,7 +29,7 @@
         <dependency>
             <artifactId>multi-feign-spring-boot-starter</artifactId>
             <groupId>com.illegalaccess</groupId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>multi-feign</artifactId>
         <groupId>com.illegalaccess</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -18,7 +18,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <multi.feign.version>1.0-SNAPSHOT</multi.feign.version>
         <feign.version>10.7.0</feign.version>
         <lombok.version>1.18.10</lombok.version>
         <spring.version>5.2.2.RELEASE</spring.version>
@@ -28,7 +27,7 @@
         <dependency>
             <groupId>com.illegalaccess</groupId>
             <artifactId>multi-feign-spring-boot-autoconfigure</artifactId>
-            <version>${multi.feign.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
