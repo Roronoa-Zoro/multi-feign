@@ -2,11 +2,9 @@ package com.illegalaccess.feign.okhttp;
 
 import com.illegalaccess.feign.annotation.EnableMultiFeignClient;
 import com.illegalaccess.feign.okhttp.bo.HelloBean;
-import com.illegalaccess.feign.okhttp.client.OkHttpApi;
 import com.illegalaccess.feign.okhttp.service.ApiService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-//import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by xiao on 2019/12/18.
  */
 @EnableMultiFeignClient
-//@EnableFeignClients
 @RestController
 @SpringBootApplication
 public class OkHttpSampleStarter {

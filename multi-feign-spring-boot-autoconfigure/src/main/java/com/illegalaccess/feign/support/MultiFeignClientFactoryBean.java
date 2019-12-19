@@ -58,12 +58,6 @@ public class MultiFeignClientFactoryBean
      */
     private int retryMaxPeriod;
 
-    private MultiFeignBuildProperties multiFeignBuildProperties;
-
-    private String path;
-
-    private boolean decode404;
-
     private ApplicationContext applicationContext;
 
     @Nullable
@@ -91,10 +85,8 @@ public class MultiFeignClientFactoryBean
             LoggerLevelMappingEnum loggerLevelMappingEnum = LoggerLevelMappingEnum.getMappingByLogLevel(logLevel);
             builder.logger(new Slf4jLogger()).logLevel(loggerLevelMappingEnum.getFeignLoggerLevel());
         }
-        // TODO 添加拦截器
-//        builder.target(type, url);
+        // TODO apply interceptors
         return builder.target(new Target.HardCodedTarget<>(this.type, this.name, url));
-//        return builder.build();
     }
 
     @Nullable

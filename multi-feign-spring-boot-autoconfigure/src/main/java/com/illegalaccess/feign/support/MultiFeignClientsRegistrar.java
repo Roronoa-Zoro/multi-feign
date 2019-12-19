@@ -29,6 +29,7 @@ import java.util.Set;
 
 /**
  * Created by xiao on 2019/12/17.
+ * register the interface which is annotated with @MultiFeignClient into spring context
  *
  */
 public class MultiFeignClientsRegistrar implements ImportBeanDefinitionRegistrar, ResourceLoaderAware, EnvironmentAware {
@@ -99,7 +100,7 @@ public class MultiFeignClientsRegistrar implements ImportBeanDefinitionRegistrar
                     AnnotatedBeanDefinition beanDefinition = (AnnotatedBeanDefinition) candidateComponent;
                     AnnotationMetadata annotationMetadata = beanDefinition.getMetadata();
                     Assert.isTrue(annotationMetadata.isInterface(),
-                            "@FeignClient can only be specified on an interface");
+                            "@MultiFeignClient can only be specified on an interface");
 
                     Map<String, Object> attributes = annotationMetadata
                             .getAnnotationAttributes(
@@ -118,9 +119,7 @@ public class MultiFeignClientsRegistrar implements ImportBeanDefinitionRegistrar
         String className = annotationMetadata.getClassName();
         BeanDefinitionBuilder definition = BeanDefinitionBuilder
                 .genericBeanDefinition(MultiFeignClientFactoryBean.class);
-//        validate(attributes);
         definition.addPropertyValue("url", resolve((String) attributes.get("url")));
-//        definition.addPropertyValue("path", getPath(attributes));
         String name = resolve((String) attributes.get("name"));
         definition.addPropertyValue("name", name);
         definition.addPropertyValue("type", className);
@@ -130,23 +129,10 @@ public class MultiFeignClientsRegistrar implements ImportBeanDefinitionRegistrar
         definition.addPropertyValue("retry", attributes.get("retry"));
         definition.addPropertyValue("retryPeriod", attributes.get("retryPeriod"));
         definition.addPropertyValue("retryMaxPeriod", attributes.get("retryMaxPeriod"));
-//        definition.addPropertyValue("decode404", attributes.get("decode404"));
-//        definition.addPropertyValue("fallback", attributes.get("fallback"));
-//        definition.addPropertyValue("fallbackFactory", attributes.get("fallbackFactory"));
+
         definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
 
-//        String alias = contextId + "FeignClient";
         AbstractBeanDefinition beanDefinition = definition.getBeanDefinition();
-
-//        boolean primary = (Boolean) attributes.get("primary"); // has a default, won't be
-        // null
-
-//        beanDefinition.setPrimary(primary);
-
-//        String qualifier = getQualifier(attributes);
-//        if (StringUtils.hasText(qualifier)) {
-//            alias = qualifier;
-//        }
 
         BeanDefinitionHolder holder = new BeanDefinitionHolder(beanDefinition, className);
         BeanDefinitionReaderUtils.registerBeanDefinition(holder, registry);
@@ -188,7 +174,7 @@ public class MultiFeignClientsRegistrar implements ImportBeanDefinitionRegistrar
             }
         }
 
-        // 扫描启动类下的包
+        // using package of starter class
         if (basePackages.isEmpty()) {
             basePackages.add(
                     ClassUtils.getPackageName(importingClassMetadata.getClassName()));

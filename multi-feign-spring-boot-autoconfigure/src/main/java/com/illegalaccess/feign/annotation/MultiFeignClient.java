@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 import java.util.List;
 
 /**
- * Created by xiao on 2019/12/17.
+ * Created by Jimmy on 2019/12/17.
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
@@ -21,19 +21,19 @@ public @interface MultiFeignClient {
     String name();
 
     /**
-     * 需要使用第连接池bean的名称
+     * the name of httpclient/okhttp bean
      * @return
      */
     String clientPoolName();
 
     /**
-     * 服务的url
+     * service url
      * @return
      */
     String url();
 
     /**
-     * 连接池的类型，和上面的熟悉成对使用
+     * connection pool type
      * @see com.illegalaccess.feign.enums.ClientPoolTypeEnum
      * @return
      */
@@ -61,6 +61,6 @@ public @interface MultiFeignClient {
      */
     int retryMaxPeriod() default 1000;
 
-    // TODO
-//    List<RequestInterceptor> interceptors() default {};
+    // TODO interceptors
+    Class<? extends RequestInterceptor>[] interceptors() default {};
 }
