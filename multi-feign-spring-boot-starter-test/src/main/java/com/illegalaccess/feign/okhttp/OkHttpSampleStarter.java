@@ -2,6 +2,7 @@ package com.illegalaccess.feign.okhttp;
 
 import com.illegalaccess.feign.annotation.EnableMultiFeignClient;
 import com.illegalaccess.feign.okhttp.bo.HelloBean;
+import com.illegalaccess.feign.okhttp.interceptor.GlobalIDInterceptor;
 import com.illegalaccess.feign.okhttp.service.ApiService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Created by xiao on 2019/12/18.
  */
-@EnableMultiFeignClient
+@EnableMultiFeignClient(globalInterceptors = {GlobalIDInterceptor.class})
 @RestController
 @SpringBootApplication
 public class OkHttpSampleStarter {

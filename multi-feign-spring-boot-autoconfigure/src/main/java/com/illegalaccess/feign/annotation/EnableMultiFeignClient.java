@@ -28,10 +28,9 @@ public @interface EnableMultiFeignClient {
      */
     Class<?>[] clients() default {};
 
-    // todo
     /**
      * these interceptors will be applied to all MultiFeignClient
      * @return
      */
-    Class<? extends RequestInterceptor>[] interceptors() default {};
+    Class<? extends RequestInterceptor>[] globalInterceptors() default {};
 }

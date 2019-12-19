@@ -4,6 +4,7 @@ import com.illegalaccess.feign.enums.ClientPoolTypeEnum;
 import com.illegalaccess.feign.enums.LogLevelEnum;
 import com.illegalaccess.feign.enums.LoggerLevelMappingEnum;
 import feign.Feign;
+import feign.RequestInterceptor;
 import feign.Retryer;
 import feign.Target;
 import feign.httpclient.ApacheHttpClient;
@@ -15,7 +16,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.HttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -23,15 +27,20 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.lang.Nullable;
 
+import java.util.Set;
+
 /**
  * Created by xiao on 2019/12/18.
  */
+@Slf4j
 @Setter
 @Getter
 @EqualsAndHashCode
 @ToString
 public class MultiFeignClientFactoryBean
         implements FactoryBean<Object>, InitializingBean, ApplicationContextAware {
+
+    private static Logger logger = LoggerFactory.getLogger(MultiFeignClientFactoryBean.class);
 
     private Class<?> type;
 
@@ -57,6 +66,8 @@ public class MultiFeignClientFactoryBean
      * @return
      */
     private int retryMaxPeriod;
+
+    private Set<Class<? extends RequestInterceptor>> interceptors;
 
     private ApplicationContext applicationContext;
 
@@ -85,7 +96,18 @@ public class MultiFeignClientFactoryBean
             LoggerLevelMappingEnum loggerLevelMappingEnum = LoggerLevelMappingEnum.getMappingByLogLevel(logLevel);
             builder.logger(new Slf4jLogger()).logLevel(loggerLevelMappingEnum.getFeignLoggerLevel());
         }
-        // TODO apply interceptors
+
+        if (interceptors != null && !interceptors.isEmpty()) {
+            interceptors.forEach(interceptor -> {
+                try {
+                    builder.requestInterceptor(interceptor.newInstance());
+                } catch (InstantiationException e) {
+                    logger.error("apply requestInterceptor:{} fail", interceptor, e);
+                } catch (IllegalAccessException e) {
+                    logger.error("apply requestInterceptor:{} fail", interceptor, e);
+                }
+            });
+        }
         return builder.target(new Target.HardCodedTarget<>(this.type, this.name, url));
     }
 

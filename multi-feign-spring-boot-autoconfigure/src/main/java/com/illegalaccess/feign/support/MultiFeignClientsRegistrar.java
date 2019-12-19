@@ -2,6 +2,7 @@ package com.illegalaccess.feign.support;
 
 import com.illegalaccess.feign.annotation.EnableMultiFeignClient;
 import com.illegalaccess.feign.annotation.MultiFeignClient;
+import feign.RequestInterceptor;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
@@ -23,9 +24,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by xiao on 2019/12/17.
@@ -106,6 +105,7 @@ public class MultiFeignClientsRegistrar implements ImportBeanDefinitionRegistrar
                             .getAnnotationAttributes(
                                     MultiFeignClient.class.getCanonicalName());
 
+                    attributes.putAll(attrs);
                     String name = getClientName(attributes);
 
                     registerFeignClient(registry, annotationMetadata, attributes);
@@ -129,6 +129,19 @@ public class MultiFeignClientsRegistrar implements ImportBeanDefinitionRegistrar
         definition.addPropertyValue("retry", attributes.get("retry"));
         definition.addPropertyValue("retryPeriod", attributes.get("retryPeriod"));
         definition.addPropertyValue("retryMaxPeriod", attributes.get("retryMaxPeriod"));
+
+        Set<Class<? extends RequestInterceptor>> interceptors = new HashSet<>();
+        if (attributes.get("globalInterceptors") != null) {
+            Class<? extends RequestInterceptor>[] globalInterceptors = (Class<? extends RequestInterceptor>[]) attributes.get("globalInterceptors");
+            interceptors.addAll(Arrays.asList(globalInterceptors));
+        }
+        if (attributes.get("interceptors") != null) {
+            Class<? extends RequestInterceptor>[] separateInterceptors = (Class<? extends RequestInterceptor>[]) attributes.get("interceptors");
+            interceptors.addAll(Arrays.asList(separateInterceptors));
+        }
+        if (!interceptors.isEmpty()) {
+            definition.addPropertyValue("interceptors", interceptors);
+        }
 
         definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
 

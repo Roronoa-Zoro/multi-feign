@@ -5,5 +5,5 @@ feign:
     enabled: true
 logging:
   level:
-#    root: debug
+    root: debug
     com.illegalaccess.feign.okhttp.client: debug
